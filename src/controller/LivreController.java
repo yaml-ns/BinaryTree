@@ -13,6 +13,7 @@ public class LivreController {
     private ArbreAVL<Livre> arbreCategorie;
     private ArbreAVL<Livre> arbreAuteur;
     private ArbreAVL<Livre> arbreTitre;
+    private ArbreAVL<Livre> arbrePrix;
     private ArbreAVL<Livre> arbreDate;
 
     public LivreController(String cheminFichier) throws IOException {
@@ -21,6 +22,7 @@ public class LivreController {
         arbreCategorie = new ArbreAVL<>(Comparator.comparing(Livre::getCategorie));
         arbreAuteur = new ArbreAVL<>(Comparator.comparing(Livre::getAuteur));
         arbreTitre = new ArbreAVL<>(Comparator.comparing(Livre::getTitre));
+        arbrePrix = new ArbreAVL<>(Comparator.comparing(Livre::getPrix));
         arbreDate = new ArbreAVL<>(Comparator.comparing(Livre::getDatePublication).reversed());
 
         for (Livre livre : livres) {
@@ -59,13 +61,12 @@ public class LivreController {
 
     public List<Livre> chercherParCategorieEtPrix(String categorie, double prixMin, double prixMax) {
         List<Livre> result = new ArrayList<>();
-        for (Livre livre : livres) {
+        for (Livre livre : arbrePrix.parcoursInOrdre()) {
             if (livre.getCategorie().equalsIgnoreCase(categorie) &&
                     livre.getPrix() >= prixMin && livre.getPrix() <= prixMax) {
                 result.add(livre);
             }
         }
-        result.sort(Comparator.comparing(Livre::getPrix));
         return result;
     }
 
@@ -80,27 +81,28 @@ public class LivreController {
     }
 
     public List<Livre> chercherParAuteurEtTitre(String auteur, String debutTitre) {
-        ArbreAVL<Livre> arbreAuteurEtTitre = new ArbreAVL<>(Comparator.comparing(Livre::getTitre));
-        for (Livre livre : livres) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreAuteur.parcoursInOrdre()) {
             if (livre.getAuteur().equalsIgnoreCase(auteur) &&
                     livre.getTitre().toLowerCase().startsWith(debutTitre.toLowerCase())) {
-                arbreAuteurEtTitre.insererNode(livre);
+                result.add(livre);
             }
         }
-        return arbreAuteurEtTitre.parcoursInOrdre();
+        result.sort(Comparator.comparing(Livre::getTitre));
+        return result;
     }
 
     public List<Livre> chercherParAuteurEtDate(String auteur) {
-        ArbreAVL<Livre> arbreAuteurEtDate = new ArbreAVL<>(Comparator.comparing(Livre::getDatePublication).reversed());
-        for (Livre livre : livres) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreDate.parcoursInOrdre()) {
             if (livre.getAuteur().equalsIgnoreCase(auteur)) {
-                arbreAuteurEtDate.insererNode(livre);
+                result.add(livre);
             }
         }
-        return arbreAuteurEtDate.parcoursInOrdre();
+        return result;
     }
 
-    private List<Livre> filtreEtTrie(ArbreAVL<Livre> arbre, Object critere) {
+        private List<Livre> filtreEtTrie(ArbreAVL<Livre> arbre, Object critere) {
         List<Livre> result = new ArrayList<>();
         for (Livre livre : arbre.parcoursInOrdre()) {
             if (critere.equals(livre.getCategorie()) || critere.equals(livre.getAuteur()) || critere.equals(livre.getTitre()) || critere.equals(livre.getDatePublication())) {
@@ -111,21 +113,21 @@ public class LivreController {
     }
 
     public Map<String, Map<String, List<String>>> afficherLivresHiérarchie() {
-        Map<String, Map<String, List<String>>> hiérarchie = new TreeMap<>();
+        Map<String, Map<String, List<String>>> hierarchy = new TreeMap<>();
 
         for (Livre livre : livres) {
-            hiérarchie
+            hierarchy
                     .computeIfAbsent(livre.getCategorie(), k -> new TreeMap<>())
                     .computeIfAbsent(livre.getAuteur(), k -> new ArrayList<>())
                     .add(livre.getTitre());
         }
 
-        hiérarchie.values().forEach(auteurs ->
+        hierarchy.values().forEach(auteurs ->
                 auteurs.values().forEach(titres ->
                         titres.sort(Comparator.naturalOrder())
                 )
         );
 
-        return hiérarchie;
+        return hierarchy;
     }
 }
