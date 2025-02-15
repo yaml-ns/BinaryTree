@@ -18,7 +18,7 @@ public class CSVReader {
         try (BufferedReader br = new BufferedReader(new FileReader(cheminFichier))) {
             String ligne;
             while ((ligne = br.readLine()) != null) {
-                String[] details = ligne.split(",");
+                String[] details = ligne.split(";");
                 LocalDate datePublication = LocalDate.parse(details[5], formatter);
                 Livre livre = new Livre(details[0], details[1], details[2], details[3], Double.parseDouble(details[4]), datePublication, Integer.parseInt(details[6]));
                 livres.add(livre);
