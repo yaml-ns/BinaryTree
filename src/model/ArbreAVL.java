@@ -5,14 +5,29 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Classe représentant un arbre AVL pour stocker des éléments de type générique T.
+ *
+ * @param <T> Le type des éléments stockés dans l'arbre AVL.
+ */
 public class ArbreAVL<T> {
     private Node<T> root;
     private Comparator<T> comparator;
 
+    /**
+     * Constructeur pour créer un arbre AVL avec un comparateur donné.
+     *
+     * @param comparator Le comparateur pour ordonner les éléments de l'arbre.
+     */
     public ArbreAVL(Comparator<T> comparator) {
         this.comparator = comparator;
     }
 
+    /**
+     * Insère un élément dans l'arbre AVL.
+     *
+     * @param key L'élément à insérer.
+     */
     public void insererNode(T key) {
         root = insertRec(root, key);
     }
@@ -90,6 +105,11 @@ public class ArbreAVL<T> {
         return y;
     }
 
+    /**
+     * Retourne la liste des éléments de l'arbre AVL en ordre croissant.
+     *
+     * @return Liste des éléments en ordre croissant.
+     */
     public List<T> parcoursInOrdre() {
         List<T> result = new ArrayList<>();
         parcoursInOrdreRec(root, result);
@@ -104,6 +124,13 @@ public class ArbreAVL<T> {
         }
     }
 
+    /**
+     * Recherche des éléments dans l'arbre AVL selon un critère donné.
+     *
+     * @param critereExtractor Fonction pour extraire le critère de chaque élément.
+     * @param critere Valeur du critère recherché.
+     * @return Liste des éléments correspondant au critère.
+     */
     public List<T> rechercherParCritere(Function<T, ?> critereExtractor, Object critere) {
         List<T> result = new ArrayList<>();
         rechercherParCritereRec(root, critereExtractor, critere, result);
