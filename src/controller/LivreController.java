@@ -6,9 +6,7 @@ import util.CSVReader;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class LivreController {
     private List<Livre> livres;
@@ -110,5 +108,24 @@ public class LivreController {
             }
         }
         return result;
+    }
+
+    public Map<String, Map<String, List<String>>> afficherLivresHiérarchie() {
+        Map<String, Map<String, List<String>>> hiérarchie = new TreeMap<>();
+
+        for (Livre livre : livres) {
+            hiérarchie
+                    .computeIfAbsent(livre.getCategorie(), k -> new TreeMap<>())
+                    .computeIfAbsent(livre.getAuteur(), k -> new ArrayList<>())
+                    .add(livre.getTitre());
+        }
+
+        hiérarchie.values().forEach(auteurs ->
+                auteurs.values().forEach(titres ->
+                        titres.sort(Comparator.naturalOrder())
+                )
+        );
+
+        return hiérarchie;
     }
 }
