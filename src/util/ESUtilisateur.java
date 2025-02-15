@@ -5,12 +5,26 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Classe utilitaire pour les interactions avec l'utilisateur.
+ */
 public class ESUtilisateur {
 
+    /**
+     * Affiche un message à l'utilisateur.
+     *
+     * @param message Le message à afficher.
+     */
     public static void afficherMessage(String message){
         System.out.println(message);
     }
 
+    /**
+     * Demande un texte à l'utilisateur avec un message.
+     *
+     * @param message Le message demandant un texte à l'utilisateur.
+     * @return Le texte saisi par l'utilisateur.
+     */
     public static String getText(String message){
         String text;
         Scanner scanner = new Scanner(System.in);
@@ -30,6 +44,15 @@ public class ESUtilisateur {
         }
         return text;
     }
+
+    /**
+     * Demande un entier à l'utilisateur dans un intervalle spécifique avec un message.
+     *
+     * @param min Le minimum acceptable.
+     * @param max Le maximum acceptable.
+     * @param message Le message demandant un entier à l'utilisateur.
+     * @return Le nombre entier saisi par l'utilisateur.
+     */
     public static int getInt(int min, int max, String message) {
         int nombre;
         Scanner scanner = new Scanner(System.in);
@@ -50,6 +73,14 @@ public class ESUtilisateur {
         return nombre;
     }
 
+    /**
+     * Demande un nombre décimal à l'utilisateur dans un intervalle spécifique avec un message.
+     *
+     * @param min Le minimum acceptable.
+     * @param max Le maximum acceptable.
+     * @param message Le message demandant un nombre décimal à l'utilisateur.
+     * @return Le nombre décimal saisi par l'utilisateur.
+     */
     public static double getDouble(double min, double max, String message) {
         double nombre;
         Scanner scanner = new Scanner(System.in);
@@ -70,6 +101,12 @@ public class ESUtilisateur {
         return nombre;
     }
 
+    /**
+     * Demande une confirmation (oui ou non) à l'utilisateur avec un message.
+     *
+     * @param message Le message demandant une confirmation à l'utilisateur.
+     * @return true si l'utilisateur répond "oui" ou "o", false sinon.
+     */
     public static boolean confirm(String message) {
         boolean response;
         Scanner scanner = new Scanner(System.in);
@@ -87,6 +124,12 @@ public class ESUtilisateur {
         return response;
     }
 
+    /**
+     * Demande une date à l'utilisateur avec un message.
+     *
+     * @param message Le message demandant une date à l'utilisateur.
+     * @return La date saisie par l'utilisateur.
+     */
     public static LocalDate getDate(String message) {
         LocalDate date;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
