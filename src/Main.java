@@ -53,9 +53,9 @@ public class Main {
                         controller.afficherParAuteurEtTitre(auteurSpecifique, debutTitre);
                         break;
                     case 8:
-                        System.out.print("Entrez l'auteur: ");
-                        String auteurPourDate = scanner.nextLine();
-                        controller.afficherParAuteurEtDate(auteurPourDate);
+                        String auteurDate = ESUtilisateur.getText("Entrez l'auteur: ");
+                        LocalDate datePublicationAuteur = ESUtilisateur.getDate("Quelle date de publication ? :");
+                        controller.afficherParAuteurEtDate(auteurDate, datePublicationAuteur);
                         break;
                     case 9:
                         String categoriePourPrix = ESUtilisateur.getText("Entrez la catégorie: ");

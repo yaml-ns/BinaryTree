@@ -94,8 +94,13 @@ public class LivreController {
         view.afficherLivres(result);
     }
 
-    public void afficherParAuteurEtDate(String auteur) {
-        List<Livre> result = arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur);
+    public void afficherParAuteurEtDate(String auteur, LocalDate datePublication) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur)) {
+            if (livre.getDatePublication().equals(datePublication)) {
+                result.add(livre);
+            }
+        }
         view.afficherLivres(result);
     }
 
