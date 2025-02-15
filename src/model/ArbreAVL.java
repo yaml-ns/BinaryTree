@@ -102,4 +102,22 @@ public class ArbreAVL<T> {
             parcoursInOrdreRec(node.getRight(), result);
         }
     }
+
+    public List<T> rechercherParCritere(Object critere) {
+        List<T> result = new ArrayList<>();
+        rechercherParCritereRec(root, critere, result);
+        return result;
+    }
+
+    private void rechercherParCritereRec(Node<T> node, Object critere, List<T> result) {
+        if (node != null) {
+            rechercherParCritereRec(node.getLeft(), critere, result);
+            for (T key : node.getKeys()) {
+                if (critere.equals(key)) {
+                    result.add(key);
+                }
+            }
+            rechercherParCritereRec(node.getRight(), critere, result);
+        }
+    }
 }

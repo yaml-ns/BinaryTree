@@ -3,6 +3,7 @@ package controller;
 import model.ArbreAVL;
 import model.Livre;
 import util.CSVReader;
+import view.LivreView;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -13,53 +14,70 @@ public class LivreController {
     private ArbreAVL<Livre> arbreCategorie;
     private ArbreAVL<Livre> arbreAuteur;
     private ArbreAVL<Livre> arbreTitre;
-    private ArbreAVL<Livre> arbrePrix;
     private ArbreAVL<Livre> arbreDate;
+    private ArbreAVL<Livre> arbrePrix;
+    private LivreView view;
 
-    public LivreController(String cheminFichier) throws IOException {
+    public LivreController(String cheminFichier, LivreView view) throws IOException {
+        this.view = view;
         livres = CSVReader.lireLivres(cheminFichier);
 
         arbreCategorie = new ArbreAVL<>(Comparator.comparing(Livre::getCategorie));
         arbreAuteur = new ArbreAVL<>(Comparator.comparing(Livre::getAuteur));
         arbreTitre = new ArbreAVL<>(Comparator.comparing(Livre::getTitre));
-        arbrePrix = new ArbreAVL<>(Comparator.comparing(Livre::getPrix));
         arbreDate = new ArbreAVL<>(Comparator.comparing(Livre::getDatePublication).reversed());
+        arbrePrix = new ArbreAVL<>(Comparator.comparing(Livre::getPrix));
 
         for (Livre livre : livres) {
             arbreCategorie.insererNode(livre);
             arbreAuteur.insererNode(livre);
             arbreTitre.insererNode(livre);
             arbreDate.insererNode(livre);
+            arbrePrix.insererNode(livre);
         }
     }
 
-    public List<Livre> chercherParCategorie(String categorie) {
-        return filtreEtTrie(arbreCategorie, categorie);
-    }
-
-    public List<Livre> chercherParAuteur(String auteur) {
-        return filtreEtTrie(arbreAuteur, auteur);
-    }
-
-    public List<Livre> chercherParTitre(String titre) {
-        return filtreEtTrie(arbreTitre, titre);
-    }
-
-    public List<Livre> chercherParDatePublication(LocalDate datePublication) {
-        return filtreEtTrie(arbreDate, datePublication);
-    }
-
-    public List<Livre> chercherParPrixExact(double prix) {
-        ArbreAVL<Livre> arbrePrix = new ArbreAVL<>(Comparator.comparing(Livre::getPrix));
-        for (Livre livre : livres) {
-            if (livre.getPrix() == prix) {
-                arbrePrix.insererNode(livre);
-            }
+    public void afficherParCategorie(String categorie) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreCategorie.rechercherParCritere(categorie)) {
+            result.add(livre);
         }
-        return arbrePrix.parcoursInOrdre();
+        view.afficherLivres(result);
     }
 
-    public List<Livre> chercherParCategorieEtPrix(String categorie, double prixMin, double prixMax) {
+    public void afficherParAuteur(String auteur) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
+            result.add(livre);
+        }
+        view.afficherLivres(result);
+    }
+
+    public void afficherParTitre(String titre) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreTitre.rechercherParCritere(titre)) {
+            result.add(livre);
+        }
+        view.afficherLivres(result);
+    }
+
+    public void afficherParDatePublication(LocalDate datePublication) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbreDate.rechercherParCritere(datePublication)) {
+            result.add(livre);
+        }
+        view.afficherLivres(result);
+    }
+
+    public void afficherParPrixExact(double prix) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : arbrePrix.rechercherParCritere(prix)) {
+            result.add(livre);
+        }
+        view.afficherLivres(result);
+    }
+
+    public void afficherParCategorieEtPrix(String categorie, double prixMin, double prixMax) {
         List<Livre> result = new ArrayList<>();
         for (Livre livre : arbrePrix.parcoursInOrdre()) {
             if (livre.getCategorie().equalsIgnoreCase(categorie) &&
@@ -67,67 +85,54 @@ public class LivreController {
                 result.add(livre);
             }
         }
-        return result;
+        view.afficherLivres(result);
     }
 
-    public List<Livre> chercherLivresRuptureStock() {
+    public void afficherLivresRuptureStock() {
         List<Livre> ruptureStock = new ArrayList<>();
-        for (Livre livre : livres) {
+        for (Livre livre : arbrePrix.parcoursInOrdre()) {
             if (livre.getQuantite() == 0) {
                 ruptureStock.add(livre);
             }
         }
-        return ruptureStock;
+        view.afficherLivres(ruptureStock);
     }
 
-    public List<Livre> chercherParAuteurEtTitre(String auteur, String debutTitre) {
+    public void afficherParAuteurEtTitre(String auteur, String debutTitre) {
         List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreAuteur.parcoursInOrdre()) {
-            if (livre.getAuteur().equalsIgnoreCase(auteur) &&
-                    livre.getTitre().toLowerCase().startsWith(debutTitre.toLowerCase())) {
+        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
+            if (livre.getTitre().toLowerCase().startsWith(debutTitre.toLowerCase())) {
                 result.add(livre);
             }
         }
         result.sort(Comparator.comparing(Livre::getTitre));
-        return result;
+        view.afficherLivres(result);
     }
 
-    public List<Livre> chercherParAuteurEtDate(String auteur) {
+    public void afficherParAuteurEtDate(String auteur) {
         List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreDate.parcoursInOrdre()) {
-            if (livre.getAuteur().equalsIgnoreCase(auteur)) {
-                result.add(livre);
-            }
+        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
+            result.add(livre);
         }
-        return result;
+        view.afficherLivres(result);
     }
 
-        private List<Livre> filtreEtTrie(ArbreAVL<Livre> arbre, Object critere) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbre.parcoursInOrdre()) {
-            if (critere.equals(livre.getCategorie()) || critere.equals(livre.getAuteur()) || critere.equals(livre.getTitre()) || critere.equals(livre.getDatePublication())) {
-                result.add(livre);
-            }
-        }
-        return result;
-    }
-
-    public Map<String, Map<String, List<String>>> afficherLivresHiérarchie() {
-        Map<String, Map<String, List<String>>> hierarchy = new TreeMap<>();
+    public void afficherLivresHierarchie() {
+        Map<String, Map<String, List<String>>> hierarchie = new TreeMap<>();
 
         for (Livre livre : livres) {
-            hierarchy
+            hierarchie
                     .computeIfAbsent(livre.getCategorie(), k -> new TreeMap<>())
                     .computeIfAbsent(livre.getAuteur(), k -> new ArrayList<>())
                     .add(livre.getTitre());
         }
 
-        hierarchy.values().forEach(auteurs ->
+        hierarchie.values().forEach(auteurs ->
                 auteurs.values().forEach(titres ->
                         titres.sort(Comparator.naturalOrder())
                 )
         );
 
-        return hierarchy;
+        view.afficherLivresHierarchie(hierarchie);
     }
 }
