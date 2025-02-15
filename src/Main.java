@@ -12,7 +12,6 @@ public class Main {
             LivreView view = new LivreView();
             LivreController controller = new LivreController("src/data/livres.csv", view);
             controller.start();
-
         } catch (IOException e) {
             System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }

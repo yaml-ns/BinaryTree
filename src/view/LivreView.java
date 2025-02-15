@@ -1,6 +1,7 @@
 package view;
 
 import model.Livre;
+import util.AfficherLivres;
 
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,7 @@ public class LivreView {
     }
 
     public void afficherLivres(List<Livre> livres) {
-        for (Livre livre : livres) {
-            System.out.println(livre);
-        }
+        AfficherLivres.afficher(livres);
     }
 
     public void afficherLivresHierarchie(Map<String, Map<String, List<String>>> hierarchy) {
