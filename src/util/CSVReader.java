@@ -16,16 +16,26 @@ public class CSVReader {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try (BufferedReader br = new BufferedReader(new FileReader(cheminFichier))) {
-            String ligne;
+            String ligne = br.readLine();
             while ((ligne = br.readLine()) != null) {
                 String[] details = ligne.split(";");
-                LocalDate datePublication = LocalDate.parse(details[5], formatter);
-                Livre livre = new Livre(details[0], details[1], details[2], details[3], Double.parseDouble(details[4]), datePublication, Integer.parseInt(details[6]));
+                Livre livre = getLivre(details, formatter);
                 livres.add(livre);
             }
-        }catch (Exception e){
-            System.out.println(e.getMessage());
         }
         return livres;
+    }
+
+    private static Livre getLivre(String[] details, DateTimeFormatter formatter) {
+        String ISBN = details[0].replace("{", "").replace("}", "").trim();
+        String titre = details[1].replace("{", "").replace("}", "").trim();
+        String auteur = details[2].replace("{", "").replace("}", "").trim();
+        String categorie = details[3].replace("{", "").replace("}", "").trim();
+        double prix = Double.parseDouble(details[4].replace("{", "").replace("}", "").trim());
+        LocalDate datePublication = LocalDate.parse(details[5].replace("{", "").replace("}", "").trim(), formatter);
+        int quantite = Integer.parseInt(details[6].replace("{", "").replace("}", "").trim());
+
+        Livre livre = new Livre(ISBN, titre, auteur, categorie, prix, datePublication, quantite);
+        return livre;
     }
 }

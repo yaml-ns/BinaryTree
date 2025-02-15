@@ -1,5 +1,6 @@
-978-2070368228;Le Petit Prince;Antoine de Saint-Exupéry;Roman;10.99;1943-04-06;5
-978-2070643028;Harry Potter et la Pierre Philosophale;J.K. Rowling;Fantasy;15.99;1997-06-26;8
-978-0451524935;1984;George Orwell;Dystopie;12.50;1949-06-08;2
-978-0261102385;Le Seigneur des Anneaux;J.R.R. Tolkien;Fantasy;25.00;1954-07-29;0
-978-2070409328;Les Misérables;Victor Hugo;Classique;18.75;1862-04-03;4
+ISBN;titre;auteur;categorie,prix;datePublication;quantite
+{978-2070368228};{Le Petit Prince};{Antoine de Saint-Exupéry};{Roman};{10.99};{1943-04-06};{5}
+{978-2070643028};{Harry Potter et la Pierre Philosophale};{J.K. Rowling};{Fantasy};{15.99};{1997-06-26};{8}
+{978-0451524935};{1984};{George Orwell};{Dystopie};{12.50};{1949-06-08};{2}
+{978-0261102385};{Le Seigneur des Anneaux};{J.R.R. Tolkien};{Fantasy};{25.00};{1954-07-29};{0}
+{978-2070409328};{Les Misérables};{Victor Hugo};{Classique};{18.75};{1862-04-03};{4}
