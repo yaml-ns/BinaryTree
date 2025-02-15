@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 public class ArbreAVL<T> {
     private Node<T> root;
@@ -103,21 +104,21 @@ public class ArbreAVL<T> {
         }
     }
 
-    public List<T> rechercherParCritere(Object critere) {
+    public List<T> rechercherParCritere(Function<T, ?> critereExtractor, Object critere) {
         List<T> result = new ArrayList<>();
-        rechercherParCritereRec(root, critere, result);
+        rechercherParCritereRec(root, critereExtractor, critere, result);
         return result;
     }
 
-    private void rechercherParCritereRec(Node<T> node, Object critere, List<T> result) {
+    private void rechercherParCritereRec(Node<T> node, Function<T, ?> critereExtractor, Object critere, List<T> result) {
         if (node != null) {
-            rechercherParCritereRec(node.getLeft(), critere, result);
+            rechercherParCritereRec(node.getLeft(), critereExtractor, critere, result);
             for (T key : node.getKeys()) {
-                if (critere.equals(key)) {
+                if (critereExtractor.apply(key).equals(critere)) {
                     result.add(key);
                 }
             }
-            rechercherParCritereRec(node.getRight(), critere, result);
+            rechercherParCritereRec(node.getRight(), critereExtractor, critere, result);
         }
     }
 }

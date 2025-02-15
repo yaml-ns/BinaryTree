@@ -38,42 +38,27 @@ public class LivreController {
     }
 
     public void afficherParCategorie(String categorie) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreCategorie.rechercherParCritere(categorie)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbreCategorie.rechercherParCritere(Livre::getCategorie, categorie);
         view.afficherLivres(result);
     }
 
     public void afficherParAuteur(String auteur) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur);
         view.afficherLivres(result);
     }
 
     public void afficherParTitre(String titre) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreTitre.rechercherParCritere(titre)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbreTitre.rechercherParCritere(Livre::getTitre, titre);
         view.afficherLivres(result);
     }
 
     public void afficherParDatePublication(LocalDate datePublication) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreDate.rechercherParCritere(datePublication)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbreDate.rechercherParCritere(Livre::getDatePublication, datePublication);
         view.afficherLivres(result);
     }
 
     public void afficherParPrixExact(double prix) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbrePrix.rechercherParCritere(prix)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbrePrix.rechercherParCritere(Livre::getPrix, prix);
         view.afficherLivres(result);
     }
 
@@ -100,7 +85,7 @@ public class LivreController {
 
     public void afficherParAuteurEtTitre(String auteur, String debutTitre) {
         List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
+        for (Livre livre : arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur)) {
             if (livre.getTitre().toLowerCase().startsWith(debutTitre.toLowerCase())) {
                 result.add(livre);
             }
@@ -110,10 +95,7 @@ public class LivreController {
     }
 
     public void afficherParAuteurEtDate(String auteur) {
-        List<Livre> result = new ArrayList<>();
-        for (Livre livre : arbreAuteur.rechercherParCritere(auteur)) {
-            result.add(livre);
-        }
+        List<Livre> result = arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur);
         view.afficherLivres(result);
     }
 
