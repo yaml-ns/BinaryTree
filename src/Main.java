@@ -1,5 +1,6 @@
 
 import controller.LivreController;
+import util.ESUtilisateur;
 import view.LivreView;
 
 import java.io.IOException;
@@ -17,61 +18,38 @@ public class Main {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             while (true) {
-                System.out.println("Menu:");
-                System.out.println("1. Afficher les livres par Catégorie");
-                System.out.println("2. Afficher les livres par Auteur");
-                System.out.println("3. Afficher les livres par Titre");
-                System.out.println("4. Afficher les livres par Date de publication");
-                System.out.println("5. Afficher les livres par Prix");
-                System.out.println("6. Afficher les livres en rupture de stock");
-                System.out.println("7. Trouver les livres d'un auteur spécifique dont le titre commence par des lettres données");
-                System.out.println("8. Trouver les livres d'un auteur spécifique selon la date de publication");
-                System.out.println("9. Trouver les livres d'une catégorie dans un intervalle de prix");
-                System.out.println("10. Afficher la hiérarchie des livres");
-                System.out.println("11. Quitter");
-                System.out.print("Choisissez une option: ");
+                view.afficherMenu();
 
-                int choix = scanner.nextInt();
-                scanner.nextLine();
+                int choix = ESUtilisateur.getInt(1,11,"Choisissez une option : ");
 
                 switch (choix) {
                     case 1:
-                        System.out.print("Entrez la catégorie: ");
-                        String categorie = scanner.nextLine();
+                        String categorie = ESUtilisateur.getText("Quelle catégorie ? : ");
                         controller.afficherParCategorie(categorie);
                         break;
                     case 2:
-                        System.out.print("Entrez l'auteur: ");
-                        String auteur = scanner.nextLine();
+
+                        String auteur = ESUtilisateur.getText("Quel est le nom de l'auteur ? : ");
                         controller.afficherParAuteur(auteur);
                         break;
                     case 3:
-                        System.out.print("Entrez le titre: ");
-                        String titre = scanner.nextLine();
+                        String titre = ESUtilisateur.getText("Quel est le titre du livre ? : ");
                         controller.afficherParTitre(titre);
                         break;
                     case 4:
-                        System.out.print("Entrez la date de publication (yyyy-MM-dd): ");
-                        LocalDate datePublication = LocalDate.parse(scanner.nextLine(), formatter);
+                        LocalDate datePublication = ESUtilisateur.getDate("Entrez la date de publication (yyyy-MM-dd): ");
                         controller.afficherParDatePublication(datePublication);
                         break;
                     case 5:
-                        System.out.print("Entrez le prix: ");
-                        while (!scanner.hasNextDouble()) {
-                            System.out.println("Veuillez entrer un nombre valide.");
-                            scanner.next();
-                        }
-                        double prix = scanner.nextDouble();
+                        double prix = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Quel est le prix ? : ");
                         controller.afficherParPrixExact(prix);
                         break;
                     case 6:
                         controller.afficherLivresRuptureStock();
                         break;
                     case 7:
-                        System.out.print("Entrez l'auteur: ");
-                        String auteurSpecifique = scanner.nextLine();
-                        System.out.print("Entrez les lettres de début du titre: ");
-                        String debutTitre = scanner.nextLine();
+                        String auteurSpecifique = ESUtilisateur.getText("Entrez l'auteur: ");
+                        String debutTitre = ESUtilisateur.getText("Entrez les lettres de début du titre: ");
                         controller.afficherParAuteurEtTitre(auteurSpecifique, debutTitre);
                         break;
                     case 8:
@@ -80,20 +58,9 @@ public class Main {
                         controller.afficherParAuteurEtDate(auteurPourDate);
                         break;
                     case 9:
-                        System.out.print("Entrez la catégorie: ");
-                        String categoriePourPrix = scanner.nextLine();
-                        System.out.print("Entrez le prix minimum: ");
-                        while (!scanner.hasNextDouble()) {
-                            System.out.println("Veuillez entrer un nombre valide.");
-                            scanner.next();
-                        }
-                        double prixCategorieMin = scanner.nextDouble();
-                        System.out.print("Entrez le prix maximum: ");
-                        while (!scanner.hasNextDouble()) {
-                            System.out.println("Veuillez entrer un nombre valide.");
-                            scanner.next();
-                        }
-                        double prixCategorieMax = scanner.nextDouble();
+                        String categoriePourPrix = ESUtilisateur.getText("Entrez la catégorie: ");
+                        double prixCategorieMin = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Entrez le prix minimum: ");
+                        double prixCategorieMax = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Entrez le prix minimum: ");
                         controller.afficherParCategorieEtPrix(categoriePourPrix, prixCategorieMin, prixCategorieMax);
                         break;
                     case 10:
