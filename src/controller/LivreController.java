@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Contrôleur pour gérer les opérations sur les livres.
+ */
 public class LivreController {
     private List<Livre> livres;
     private ArbreAVL<Livre> arbreCategorie;
@@ -19,6 +22,13 @@ public class LivreController {
     private ArbreAVL<Livre> arbrePrix;
     private LivreView view;
 
+    /**
+     * Constructeur du contrôleur de livres.
+     *
+     * @param cheminFichier Chemin du fichier CSV contenant les informations des livres.
+     * @param view Vue pour afficher les informations des livres.
+     * @throws IOException En cas de problème lors de la lecture du fichier.
+     */
     public LivreController(String cheminFichier, LivreView view) throws IOException {
         this.view = view;
         livres = CSVReader.lireLivres(cheminFichier);
@@ -38,41 +48,58 @@ public class LivreController {
         }
     }
 
+    /**
+     * Affiche les livres par catégorie.
+     */
     public void afficherParCategorie() {
         String categorie = ESUtilisateur.getText("Quelle catégorie ? : ");
         List<Livre> result = arbreCategorie.rechercherParCritere(Livre::getCategorie, categorie);
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres par auteur.
+     */
     public void afficherParAuteur() {
         String auteur = ESUtilisateur.getText("Quel est le nom de l'auteur ? : ");
         List<Livre> result = arbreAuteur.rechercherParCritere(Livre::getAuteur, auteur);
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres par titre.
+     */
     public void afficherParTitre() {
         String titre = ESUtilisateur.getText("Quel est le titre du livre ? : ");
         List<Livre> result = arbreTitre.rechercherParCritere(Livre::getTitre, titre);
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres par date de publication.
+     */
     public void afficherParDatePublication() {
         LocalDate datePublication = ESUtilisateur.getDate("Entrez la date de publication (yyyy-MM-dd): ");
         List<Livre> result = arbreDate.rechercherParCritere(Livre::getDatePublication, datePublication);
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres par prix exact.
+     */
     public void afficherParPrixExact() {
-        double prix = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Quel est le prix ? : ");
+        double prix = ESUtilisateur.getDouble(0, Double.MAX_VALUE, "Quel est le prix ? : ");
         List<Livre> result = arbrePrix.rechercherParCritere(Livre::getPrix, prix);
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres par catégorie et prix dans un intervalle.
+     */
     public void afficherParCategorieEtPrix() {
-
         String categorie = ESUtilisateur.getText("Entrez la catégorie: ");
-        double prixMin = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Entrez le prix minimum: ");
-        double prixMax = ESUtilisateur.getDouble(0,Double.MAX_VALUE,"Entrez le prix minimum: ");
+        double prixMin = ESUtilisateur.getDouble(0, Double.MAX_VALUE, "Entrez le prix minimum: ");
+        double prixMax = ESUtilisateur.getDouble(0, Double.MAX_VALUE, "Entrez le prix minimum: ");
 
         List<Livre> result = new ArrayList<>();
         for (Livre livre : arbrePrix.parcoursInOrdre()) {
@@ -84,6 +111,9 @@ public class LivreController {
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres en rupture de stock.
+     */
     public void afficherLivresRuptureStock() {
         List<Livre> ruptureStock = new ArrayList<>();
         for (Livre livre : arbrePrix.parcoursInOrdre()) {
@@ -94,6 +124,9 @@ public class LivreController {
         view.afficherLivres(ruptureStock);
     }
 
+    /**
+     * Affiche les livres d'un auteur spécifique dont le titre commence par des lettres données.
+     */
     public void afficherParAuteurEtTitre() {
         String auteur = ESUtilisateur.getText("Entrez l'auteur: ");
         String debutTitre = ESUtilisateur.getText("Entrez les lettres de début du titre: ");
@@ -108,8 +141,10 @@ public class LivreController {
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres d'un auteur spécifique selon la date de publication.
+     */
     public void afficherParAuteurEtDate() {
-
         String auteur = ESUtilisateur.getText("Entrez l'auteur: ");
         LocalDate datePublication = ESUtilisateur.getDate("Quelle date de publication ? :");
 
@@ -122,6 +157,10 @@ public class LivreController {
         view.afficherLivres(result);
     }
 
+    /**
+     * Affiche les livres sous forme hiérarchique :
+     * Catégorie -> Auteur -> Titre.
+     */
     public void afficherLivresHierarchie() {
         Map<String, Map<String, List<String>>> hierarchie = new TreeMap<>();
 
@@ -141,21 +180,22 @@ public class LivreController {
         view.afficherLivresHierarchie(hierarchie);
     }
 
+    /**
+     * Démarre l'application et affiche le menu pour les différentes opérations.
+     */
     public void start() {
         while (true) {
             view.afficherMenu();
-            int choix = ESUtilisateur.getInt(1,11,"Choisissez une option : ");
+            int choix = ESUtilisateur.getInt(1, 11, "Choisissez une option : ");
 
             switch (choix) {
                 case 1:
                     afficherParCategorie();
                     break;
                 case 2:
-
                     afficherParAuteur();
                     break;
                 case 3:
-
                     afficherParTitre();
                     break;
                 case 4:
@@ -168,13 +208,13 @@ public class LivreController {
                     afficherLivresRuptureStock();
                     break;
                 case 7:
-                     afficherParAuteurEtTitre();
+                    afficherParAuteurEtTitre();
                     break;
                 case 8:
                     afficherParAuteurEtDate();
                     break;
                 case 9:
-                   afficherParCategorieEtPrix();
+                    afficherParCategorieEtPrix();
                     break;
                 case 10:
                     afficherLivresHierarchie();
