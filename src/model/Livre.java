@@ -1,15 +1,17 @@
 package model;
 
+import java.time.LocalDate;
+
 public class Livre {
     private String ISBN;
     private String titre;
     private String auteur;
     private String categorie;
     private double prix;
-    private String datePublication;
+    private LocalDate datePublication;
     private int quantite;
 
-    public Livre(String ISBN, String titre, String auteur, String categorie, double prix, String datePublication, int quantite) {
+    public Livre(String ISBN, String titre, String auteur, String categorie, double prix, LocalDate datePublication, int quantite) {
         this.ISBN = ISBN;
         this.titre = titre;
         this.auteur = auteur;
@@ -59,11 +61,11 @@ public class Livre {
         this.prix = prix;
     }
 
-    public String getDatePublication() {
+    public LocalDate getDatePublication() {
         return datePublication;
     }
 
-    public void setDatePublication(String datePublication) {
+    public void setDatePublication(LocalDate datePublication) {
         this.datePublication = datePublication;
     }
 
